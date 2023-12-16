@@ -18,7 +18,7 @@ export default function Userl({ navigation }) {
   const [password, setPassword] = useState({ value: '', error: '' })
   const [Data, setData] = useState([]);
   const [id,pid]=useState(0);
-  const serverIP="http://192.168.4.55:3001/";
+  const serverIP="http://192.168.197.55:3001/";
   const getData = async() => {
        
     fetch(serverIP + 'patient')

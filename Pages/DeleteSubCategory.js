@@ -18,7 +18,7 @@ function DeleteSubCategory(props) {
   const [objData,setobjData] = useState();
   const label = props.route.params;
   console.log("Sub label = ",label);
-  const serverIP = "http://192.168.4.55:3001/";
+  const serverIP = "http://192.168.197.55:3001/";
   const data = new FormData();
   data.append("subCategory",label);
   const config = {

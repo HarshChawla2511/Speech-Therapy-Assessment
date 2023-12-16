@@ -640,6 +640,131 @@ app.get('/progress/:patientId', (req, res) => {
   });
 });
 
+app.post('/checkEmail', (req, res) => {
+  const { email } = req.body;
+
+  // Check if the email exists in the "patient" table
+  pool.query('SELECT * FROM patient WHERE email = ?', [email], (error, results) => {
+    if (error) {
+      console.error('Error checking email:', error);
+      return res.status(500).json({ error: 'Error checking email' });
+    }
+
+    const exists = results.length > 0;
+
+    res.json({ exists });
+  });
+});
+
+const nodemailer = require('nodemailer');
+
+// Configure Nodemailer with your email service credentials
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'harsh.22010826@viit.ac.in',
+    pass: 'jghb qjxy cosj jdpr',
+  },
+});
+
+// Generate a random 6-digit OTP
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000);
+
+app.post('/sendOTP', (req, res) => {
+  const { email } = req.body;
+   console.log('Sending otp for', req.body);
+
+  // Generate OTP
+  const otp = generateOTP();
+
+  // Update the "patient" table with the generated OTP
+  pool.query('UPDATE patient SET otp = ? WHERE email = ?', [otp, email], (updateError, updateResults) => {
+    if (updateError) {
+      console.error('Error updating OTP in the patient table:', updateError);
+      return res.status(500).json({ error: 'Error updating OTP in the patient table' });
+    }
+
+    if (updateResults.affectedRows === 0) {
+      // No rows were updated, meaning the provided email does not exist
+      return res.status(404).json({ error: 'Email not found in the patient table' });
+    }
+
+    // Configure email options
+    const mailOptions = {
+      from: 'your_email@gmail.com',
+      to: email,
+      subject: 'Password Reset OTP',
+      text: `Your OTP for password of "Speech Therapy App" reset is: ${otp}`,
+    };
+
+    // Send email
+    transporter.sendMail(mailOptions, (emailError, info) => {
+      if (emailError) {
+        console.error('Error sending email:', emailError);
+        return res.status(500).json({ error: 'Error sending email' });
+      }
+
+      console.log('Email sent:', info.response);
+      res.json({ success: true, otp });
+    });
+  });
+});
+
+app.post('/checkOTP', (req, res) => {
+  const { email, enteredOTP } = req.body;
+  console.log('checking otp for:', req.body);
+
+  // Fetch the stored OTP from the patient table
+  pool.query('SELECT otp FROM patient WHERE email = ?', [email], (error, results) => {
+    if (error) {
+      console.error('Error fetching OTP from the patient table:', error);
+      return res.status(500).json({ error: 'Error fetching OTP from the patient table' });
+    }
+
+    if (results.length === 0) {
+      // No matching email found
+      return res.json({ success: false });
+    }
+
+    const storedOTP = results[0].otp.toString();
+
+    if (enteredOTP === storedOTP) {
+      // Valid OTP
+      return res.json({ success: true });
+    } else {
+      // Invalid OTP
+      return res.json({ success: false });
+    }
+  });
+});
+
+app.post('/updatePassword', (req, res) => {
+  const { email, newPassword } = req.body;
+   console.log('Received request body:', req.body);
+
+  // Validate if new password and confirm password match
+  if (!email || !newPassword) {
+    return res.status(400).json({ success: false, error: 'Email and newPassword are required' });
+  }
+
+  // Update the password in the patient table
+  pool.query('UPDATE patient SET password = ? WHERE email = ?', [newPassword, email], (error, results) => {
+    if (error) {
+      console.error('Error updating password:', error);
+      return res.status(500).json({ success: false, error: 'Error updating password' });
+    }
+
+    // Check if the email exists in the patient table
+    if (results.affectedRows === 0) {
+      console.error('User not found');
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    console.log('Password updated successfully');
+    res.json({ success: true, newPassword });
+  });
+});
+
 
 app.listen(3001, () => {
     console.log('Go to http://localhost:3001/insert so you can see the data.');

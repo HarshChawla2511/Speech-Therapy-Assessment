@@ -1,116 +1,46 @@
-import React, {useEffect, useState} from 'react';
-import { LogBox,SafeAreaView,TouchableOpacity } from "react-native";
-import {Image, FlatList,Text,View} from "native-base";
+import React, { useState } from 'react';
+import { Alert, TouchableOpacity, View } from 'react-native';
+import { Text, TextInput } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
-import {
-  
-  StyleSheet,
+const TakeAssess = ({ route }) => {
+  const navigation = useNavigation();
+  const [code, setCode] = useState('');
+  const uid = route.params.uid;
 
-} from 'react-native';
+  const onSubmit = () => {
+    const trimmedCode = code.trim();
+    console.log('UID:', uid);
+    console.log('Entered Code:', trimmedCode);
+    if (uid.toString() === trimmedCode) {
+      navigation.navigate('Quiz', { uid: uid });
+    } else {
+      Alert.alert('Incorrect code');
+    }
+  };
 
-import { NativeBaseProvider,  VStack} from "native-base";
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+      <Text style={{ fontSize: 24, marginBottom: 20 }}>Welcome to Assessment</Text>
+      <TextInput
+        style={{ marginBottom: 20, width: '100%' }}
+        label="Enter your code"
+        value={code}
+        onChangeText={(text) => setCode(text)}
+      />
+      <TouchableOpacity
+        style={{
+          backgroundColor: '#90EE90',
+          paddingVertical: 12,
+          paddingHorizontal: 20,
+          borderRadius: 8,
+        }}
+        onPress={onSubmit}
+      >
+        <Text style={{ color: 'white', fontWeight: 'bold' }}>Play Quiz</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
-import {useNavigation} from "@react-navigation/native";
-import { useFonts, Poppins_600SemiBold,Poppins_400Regular,Poppins_500Medium } from '@expo-google-fonts/poppins';
-
-import { Center } from 'native-base';
-import { Button, TextInput } from 'react-native-paper';
-
-const TakeAssess=()=>{
-    const navigation = useNavigation();
-    const [Name, setName] = useState('');
-    const [Phoneno, setPhoneno] = useState('');
-
-    const onPhonenoChange = (txt) => {
-        setPhoneno(txt);
-      }
-      const onNameChange = (txt) => {
-        setName(txt);
-      }
-    
-      const onsubmit=()=>{
-        // const data={Phoneno,Name};
-        fetch('http://192.168.4.55:3001/TakeAssess', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-
-          iduser:Phoneno,
-      
-          name: Name,
-        })
-      }).then(response => response.json())
-        .then(json=>console.log(json))
-        .catch(error => console.error(error))
-
-        navigation.navigate('Quiz')
-      }
-    return (
-        <View style={{flex:1}}>
-            <Text style={styles.heading}>
-                Welcome to Assessment
-            </Text>
-            <TextInput
-            style={styles.input}
-            placeholder='Enter your Number'
-            value={Phoneno}
-            onChangeText={(text) => onPhonenoChange(text)}
-            />
-            <TextInput
-            style={styles.input}
-            placeholder='Enter your Name'
-            value={Name}
-            onChangeText={(text) => onNameChange(text)}
-            />
-           <TouchableOpacity style={styles.buttonPlay} onPress={onsubmit}>
-              <Text style={{fontWeight:"bold",marginLeft:100}}>Play Quiz</Text>
-           </TouchableOpacity>
-        </View>
-    );
-}
-const styles=StyleSheet.create({
-    container:{
-        // flex:1,
-        // alignContent:"center",
-        // justifyContent:"center",
-        // alignItems:"center"
-    },
-    heading:{
-        marginLeft:100,
-        // marginRight:100,
-        marginTop:50,
-        fontSize:20,
-        borderColor:"black",
-        // height:60
-    },
-    btn:{
-        marginBottom:8,
-        backgroundColor:"purple"
-    },
-    input:{
-        borderColor:"black",
-        marginTop:30,
-        paddingHorizontal: 100,
-        marginVertical:15,
-        marginLeft:20,
-        marginRight:40
-    },
-    buttonPlay: {
-        fontSize: 16,
-        color: 'white',
-        backgroundColor:"#90EE90",
-        borderWidth: 1,
-        borderColor: 'rgba(80,80,80,0.5)',
-        overflow: 'hidden',
-        paddingHorizontal: 15,
-        paddingVertical: 7,
-        marginLeft:50,
-        marginRight:50,
-        marginTop:30
-      }
-})
-
-export default TakeAssess;
+export default TakeAssess;

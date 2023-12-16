@@ -13,7 +13,7 @@ const MarksDisplayScreen = ({ route }) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://192.168.4.55:3001/progress/${patientID}`);
+      const response = await fetch(`http://192.168.197.55:3001/progress/${patientID}`);
       const data = await response.json();
       setMarksData(data);
       console.log("data=", data);

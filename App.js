@@ -42,6 +42,8 @@ import Cards from './Pages/Cards';
 import Patient from './Pages/Patient';
 import AssignCards from './Pages/AssignCards';
 import Progress from './Pages/Progress';
+import OTPScreen from './src/screens/OTPScreen';
+import NewPassword from './src/screens/NewPassword';
  
 const Stack = createNativeStackNavigator();
 
@@ -80,6 +82,8 @@ return(
           <Stack.Screen name="Patient" component={Patient} />
           <Stack.Screen name="AssignCards" component={AssignCards} />
           <Stack.Screen name="Progress" component={Progress} />
+          <Stack.Screen name="OTPScreen" component={OTPScreen} />
+          <Stack.Screen name="NewPassword" component={NewPassword} />
           {/* <Stack.Screen name="AssignCards" component={AssignCards} /> */}
         </Stack.Navigator>
       </NavigationContainer> 

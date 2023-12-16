@@ -17,7 +17,7 @@ export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
   const [Data, setData] = useState([]);
-  const serverIP="http://192.168.4.55:3001/";
+  const serverIP="http://192.168.197.55:3001/";
   const getData = async() => {
        
     fetch(serverIP + 'doctor')

@@ -30,7 +30,7 @@ function Update(){
     });
     const [data,setData] = useState([]);
     
-    const serverIP = "http://192.168.4.55:3001/";
+    const serverIP = "http://192.168.197.55:3001/";
     const getData = async() => {
        
         fetch(serverIP + 'getCategory')

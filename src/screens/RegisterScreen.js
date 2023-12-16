@@ -1,78 +1,93 @@
-import React, { useState } from 'react'
-import { View, StyleSheet, TouchableOpacity } from 'react-native'
-import { Text } from 'react-native-paper'
-// import DatePicker from 'react-native-neat-date-picker'
-import Background from '../components/Background'
-import Logo from '../components/Logo'
-import Header from '../components/Header'
-import Button from '../components/Button'
-import TextInput from '../components/TextInput'
-import BackButton from '../components/BackButton'
-import { theme } from '../core/theme'
-import { emailValidator } from '../helpers/emailValidator'
-import { passwordValidator } from '../helpers/passwordValidator'
-import { nameValidator } from '../helpers/nameValidator'
-import { json } from 'body-parser'
-import { response } from 'express'
+import React, { useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { Text } from 'react-native-paper';
+import Background from '../components/Background';
+import Logo from '../components/Logo';
+import Header from '../components/Header';
+import Button from '../components/Button';
+import TextInput from '../components/TextInput';
+import { theme } from '../core/theme';
+import { emailValidator } from '../helpers/emailValidator';
+import { passwordValidator } from '../helpers/passwordValidator';
+import { nameValidator } from '../helpers/nameValidator';
 
 export default function RegisterScreen({ navigation }) {
-  const [name, setName] = useState({ value: '', error: '' })
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
-  const [dob, setdob] = useState("2023-01-01")
+  const [name, setName] = useState({ value: '', error: '' });
+  const [email, setEmail] = useState({ value: '', error: '' });
+  const [password, setPassword] = useState({ value: '', error: '' });
+  const [dob, setDob] = useState("2023-01-01");
 
   const onSignUpPressed = () => {
-    const nameError = nameValidator(name.value)
-    const emailError = emailValidator(email.value)
-    const passwordError = passwordValidator(password.value)
-    // const dobError = dobValidator(dob.value)
-    if (emailError || passwordError || nameError) {
-      setName({ ...name, error: nameError })
-      setEmail({ ...email, error: emailError })
-      setPassword({ ...password, error: passwordError })
-      // setDob({ ...dob, error: dobError })
-      return
-    }
-    else{
-      fetch('http://192.168.4.55:3001/Register',{
-        method:'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body:JSON.stringify({
-          email:email,
-          password:password,
-          name:name,
-          dob:dob
-        })
-      })
-      .then(response=>response.json())
-      .then(Register=>{
-        console.log(Register);
-      })
-      .catch(error=>{
-        console.log(error);
-      })
+    const nameError = nameValidator(name.value);
+    const emailError = emailValidator(email.value);
+    const passwordError = passwordValidator(password.value);
 
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Dashboard' }],
-      })
+    if (emailError || passwordError || nameError) {
+      setName({ ...name, error: nameError });
+      setEmail({ ...email, error: emailError });
+      setPassword({ ...password, error: passwordError });
+      return;
     }
-  }
+
+    // Check if the email already exists
+    fetch('http://192.168.197.55:3001/checkEmail', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email.value,
+      }),
+    })
+    .then(response => response.json())
+    .then(result => {
+      if (result.exists) {
+        // Email already exists, show an alert
+        Alert.alert('Account already exists', 'The provided email is already registered. Please use a different email.');
+      } else {
+        // Email does not exist, proceed with registration
+        fetch('http://192.168.197.55:3001/Register', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email.value,
+            password: password.value,
+            name: name.value,
+            dob: dob,
+          }),
+        })
+        .then(response => response.json())
+        .then(Register => {
+          console.log(Register);
+          // Navigate to the Dashboard on successful registration
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Dashboard' }],
+          });
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  };
 
   return (
     <Background>
-      {/* <BackButton goBack={navigation.goBack} /> */}
-      {/* <BackButton goBack={navigation.goBack} /> */}
       <Logo />
       <Header>Create Account</Header>
       <TextInput
         label="Name"
         returnKeyType="next"
         value={name.value}
-        onChangeText={(text) => setName({ value: text, error: '' })}
+        onChangeText={text => setName({ value: text, error: '' })}
         error={!!name.error}
         errorText={name.error}
       />
@@ -80,7 +95,7 @@ export default function RegisterScreen({ navigation }) {
         label="Email"
         returnKeyType="next"
         value={email.value}
-        onChangeText={(text) => setEmail({ value: text, error: '' })}
+        onChangeText={text => setEmail({ value: text, error: '' })}
         error={!!email.error}
         errorText={email.error}
         autoCapitalize="none"
@@ -92,7 +107,7 @@ export default function RegisterScreen({ navigation }) {
         label="DOB"
         returnKeyType="next"
         value={dob}
-        onChangeText={(text) => setdob(text)}
+        onChangeText={text => setDob(text)}
         error={!!dob.error}
         errorText={dob.error}
       />
@@ -100,18 +115,11 @@ export default function RegisterScreen({ navigation }) {
         label="Password"
         returnKeyType="done"
         value={password.value}
-        onChangeText={(text) => setPassword({ value: text, error: '' })}
+        onChangeText={text => setPassword({ value: text, error: '' })}
         error={!!password.error}
         errorText={password.error}
         secureTextEntry
       />
-      {/* <Button title={'open'} onPress={openDatePicker}/>
-      <DatePicker
-        isVisible={showDatePicker}
-        mode={'single'}
-        onCancel={onCancel}
-        onConfirm={onConfirm}
-      /> */}
       <Button
         mode="contained"
         onPress={onSignUpPressed}
@@ -126,7 +134,7 @@ export default function RegisterScreen({ navigation }) {
         </TouchableOpacity>
       </View>
     </Background>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -138,4 +146,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
   },
-})
+});
