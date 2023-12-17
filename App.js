@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
 
 import {
-  
   StyleSheet,
 } from 'react-native';
 
 import { NativeBaseProvider, Box, VStack} from "native-base";
-
 
 import Home from './Pages/Home';
 
@@ -98,7 +96,6 @@ const styles = StyleSheet.create({
     alignContent:'center',
     justifyContent:'center'
   },
- 
- 
 })
+
 export default App;
