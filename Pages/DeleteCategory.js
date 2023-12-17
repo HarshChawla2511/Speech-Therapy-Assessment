@@ -17,7 +17,7 @@ function DeleteCategory(props) {
     const navigation = useNavigation();
   const [data,setData] = useState([]);
   
-  const serverIP = "http://192.168.197.55:3001/";
+  const serverIP = "http://192.168.1.5:3001/";
   const getCategoryData = () => {
     // console.log("text= "+JSON.stringify(text));
     fetch(serverIP + 'getCategory')

@@ -30,7 +30,7 @@ function User(){
     });
     const [data,setData] = useState([]);
     var [imageURL,setURL] = useState("");
-    const serverIP = "http://192.168.197.55:3001/";
+    const serverIP = "http://192.168.1.5:3001/";
     const getData = async() => {
        
         fetch(serverIP + 'getCategory')

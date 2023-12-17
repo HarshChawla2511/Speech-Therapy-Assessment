@@ -30,7 +30,7 @@ export default function RegisterScreen({ navigation }) {
     }
 
     // Check if the email already exists
-    fetch('http://192.168.197.55:3001/checkEmail', {
+    fetch('http://192.168.1.5:3001/checkEmail', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -47,7 +47,7 @@ export default function RegisterScreen({ navigation }) {
         Alert.alert('Account already exists', 'The provided email is already registered. Please use a different email.');
       } else {
         // Email does not exist, proceed with registration
-        fetch('http://192.168.197.55:3001/Register', {
+        fetch('http://192.168.1.5:3001/Register', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',

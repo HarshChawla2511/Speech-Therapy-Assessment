@@ -22,7 +22,7 @@ function Create() {
     const [categoryName,setCategoryName] = useState("");
     const [subCategoryName,setSubCategoryName] = useState("");
     const [voiceName,setVoiceName] = useState("");
-    const serverIP = "http://192.168.197.55:3001/";
+    const serverIP = "http://192.168.1.5:3001/";
     let [fontsLoaded] = useFonts({
       Poppins_600SemiBold,Poppins_400Regular,Poppins_500Medium
     });
@@ -43,6 +43,7 @@ function Create() {
        .then(data => {
         console.warn(data);
              setPhotoName(data.url);
+             setPhoto('data:image/jpg;base64,' + response.assets[0].base64);
           }).catch((err) => {
               console.log(err)
           })
@@ -65,7 +66,7 @@ function Create() {
                   uri : response.assets[0].uri,
                   type : response.assets[0].type,
                   name : response.assets[0].name
-                };
+                };  
 
                 handleUploadImage(response);
             }else if (response.error) {
@@ -112,7 +113,7 @@ function Create() {
 
     const onSubmitData =async()=>{
       const data={photoName,categoryName,subCategoryName,voiceName};
-      fetch('http://192.168.197.55:3001/storeData', {
+      fetch('http://192.168.1.5:3001/storeData', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

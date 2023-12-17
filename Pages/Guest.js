@@ -10,7 +10,7 @@ const Guest = ({ route }) => {
   const navigation = useNavigation();
   const uid = route.params.uid;
   console.log("id is ", uid);
-  const serverIP = "http://192.168.197.55:3001/";
+  const serverIP = "http://192.168.1.5:3001/";
   const [data, setData] = useState([]);
 
   const getData = async () => {

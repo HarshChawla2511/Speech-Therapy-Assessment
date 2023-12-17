@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import { theme } from '../core/theme';
+import { passwordValidator } from '../helpers/passwordValidator';
 
 export default function NewPassword({ route, navigation }) {
     console.log(route.params);
@@ -17,15 +18,23 @@ export default function NewPassword({ route, navigation }) {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const onSavePressed = () => {
+
+    const passwordError = passwordValidator(newPassword);
+    if (passwordError) {
+    setNewPassword({ ...newPassword, error: passwordError });
+    return;
+    }
+
     // Validate if new password and confirm password match
     if (newPassword !== confirmPassword) {
       console.error('Passwords do not match');
+      setNewPassword({ ...newPassword, error: "passwords do not match" });
       // Handle the error (show an alert or update state to display an error message)
       return;
     }
 
     // Make a POST request to update the password in the backend
-    fetch('http://192.168.197.55:3001/updatePassword', {
+    fetch('http://192.168.1.5:3001/updatePassword', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -63,6 +72,8 @@ export default function NewPassword({ route, navigation }) {
         returnKeyType="next"
         value={newPassword}
         onChangeText={(text) => setNewPassword(text)}
+        error={!!newPassword.error}
+        errorText={newPassword.error}
         secureTextEntry
       />
       <TextInput

@@ -18,7 +18,7 @@ function Patient({ navigation }) {
 
   const fetchPatientDetails = async () => {
     try {
-      const response = await fetch(`http://192.168.197.55:3001/learns2/${patientId}`);
+      const response = await fetch(`http://192.168.1.5:3001/learns2/${patientId}`);
       const learns = await response.json();
       setPatientDetails(learns);
     } catch (error) {
@@ -28,7 +28,7 @@ function Patient({ navigation }) {
 
   const fetchPatientDetails2 = async () => {
     try {
-      const response = await fetch(`http://192.168.197.55:3001/patients/${patientId}`);
+      const response = await fetch(`http://192.168.1.5:3001/patients/${patientId}`);
       const data = await response.json();
       setPatientDetails2(data);
     } catch (error) {
@@ -43,7 +43,7 @@ function Patient({ navigation }) {
 
   const notifyAssessment = async () => {
     try {
-      const response = await fetch('http://192.168.197.55:3001/patients', {
+      const response = await fetch('http://192.168.1.5:3001/patients', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

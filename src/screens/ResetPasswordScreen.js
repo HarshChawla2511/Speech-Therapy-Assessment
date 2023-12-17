@@ -20,7 +20,7 @@ console.log(`Sending OTP for email: ${email.value}`);
     // Add this line before the fetch call
 
 
-    fetch('http://192.168.197.55:3001/sendOTP', {
+    fetch('http://192.168.1.5:3001/sendOTP', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

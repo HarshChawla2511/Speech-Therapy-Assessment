@@ -19,7 +19,7 @@ console.log('Checking OTP for email:');
 
 const onSubmitPressed = () => {
   // Fetch the stored OTP from the patient table
-  fetch('http://192.168.197.55:3001/checkOTP', {
+  fetch('http://192.168.1.5:3001/checkOTP', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -13,7 +13,7 @@ const Cards = () => {
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const response = await fetch('http://192.168.197.55:3001/card');
+        const response = await fetch('http://192.168.1.5:3001/card');
         const data = await response.json();
         setCards(data);
       } catch (error) {
@@ -56,7 +56,7 @@ const Cards = () => {
         {
           text: 'Delete',
           onPress: () => {
-            fetch('http://192.168.197.55:3001/Dcard', {
+            fetch('http://192.168.1.5:3001/Dcard', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -108,7 +108,6 @@ const Cards = () => {
           <Popover.Header></Popover.Header>
           <Popover.Body>
             <VStack space={2}>
-              <Button onPress={() => updateCard(item.cardID)}>Update</Button>
               <Button colorScheme="danger" onPress={() => deleteCard(item.cardID)}>
                 Delete
               </Button>
@@ -139,7 +138,7 @@ const Cards = () => {
       >
         Add
       </Button>
-      <Text style={styles.heading}>Cards</Text>
+      <Text style={styles.heading}> </Text>
       <FlatList
         data={cards}
         keyExtractor={(item) => item.cardID.toString()}

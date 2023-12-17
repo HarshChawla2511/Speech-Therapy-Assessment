@@ -6,7 +6,7 @@ import QuestionItem from './QuestionItem';
 const { height, width } = Dimensions.get('window');
 
 const Quiz = ({ route }) => {
-  const serverIP = 'http://192.168.197.55:3001/';
+  const serverIP = 'http://192.168.1.5:3001/';
   const [currentIndex, setCurrentIndex] = useState(1);
   const currentDate = new Date();
   const day = currentDate.getDate();
@@ -123,7 +123,7 @@ const onSubmit = async () => {
     const subcategories = data.map(item => item.subcategory).join(' ');
 
     // Submit quiz data
-    const responseQuiz = await fetch('http://192.168.197.55:3001/submitQuiz', {
+    const responseQuiz = await fetch('http://192.168.1.5:3001/submitQuiz', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -139,7 +139,7 @@ const onSubmit = async () => {
     });
 
     // Fetch progress data after submitting the quiz
-    const responseProgress = await fetch('http://192.168.197.55:3001/progress');
+    const responseProgress = await fetch('http://192.168.1.5:3001/progress');
     const progressData = await responseProgress.json();
     console.log('Fetched progress data:', progressData);
 

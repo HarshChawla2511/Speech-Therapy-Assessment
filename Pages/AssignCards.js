@@ -25,7 +25,7 @@ function AssignCards({ navigation }) {
 // Fetch categories and subcategories from the database
 const fetchCategories = async () => {
   try {
-    const response = await fetch('http://192.168.197.55:3001/card');
+    const response = await fetch('http://192.168.1.5:3001/card');
     const data = await response.json();
 
     if (data && Array.isArray(data)) {
@@ -40,7 +40,7 @@ const fetchCategories = async () => {
 
 const fetchSubCategories = async () => {
   try {
-    const response = await fetch('http://192.168.197.55:3001/card');
+    const response = await fetch('http://192.168.1.5:3001/card');
     const data = await response.json();
 
     if (data && Array.isArray(data)) {
@@ -55,7 +55,7 @@ const fetchSubCategories = async () => {
 
   const fetchPatientDetails = async () => {
     try {
-      const response = await fetch(`http://192.168.197.55:3001/learns2/${patientId}`);
+      const response = await fetch(`http://192.168.1.5:3001/learns2/${patientId}`);
       const data = await response.json();
       setPatientDetails(data);
 
@@ -76,7 +76,7 @@ useEffect(() => {
 }, []);
 
 const onAssign=()=>{
-  fetch('http://192.168.197.55:3001/AssignCards', {
+  fetch('http://192.168.1.5:3001/AssignCards', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -109,7 +109,7 @@ const onAssign=()=>{
 
  const onRemoveCards = () => {
     // Send a request to your server to remove the corresponding rows
-    fetch('http://192.168.197.55:3001/removeCards', {
+    fetch('http://192.168.1.5:3001/removeCards', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

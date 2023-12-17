@@ -362,7 +362,7 @@ app.post('/Dcard',function(req,res){
 })
 app.post('/storeData',function(req,res){
     const {cardImg,cardAudio,mainCategory,subCategory}=req.body;
-    console.log("option1=",req.body);
+    // console.log("option1=",req.body);
     // const {Option1,Option2,Option3,CorrectOption}=Info;
     const sql = `INSERT INTO card (cardImg,cardAudio,mainCategory,subCategory) VALUES (?, ?, ?, ?)`;
     pool.query(sql, [cardImg,cardAudio,mainCategory,subCategory], (error, res) => {
